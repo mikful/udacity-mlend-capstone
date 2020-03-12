@@ -1,2 +1,2 @@
 # udacity-mlend-capstone
-Udacity Machine Learning Engineer Capstone Project - Environmental Sound Classification
+Udacity Machine Learning Engineer Capstone Project - Audio Tagging
