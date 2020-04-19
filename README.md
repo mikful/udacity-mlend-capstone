@@ -44,6 +44,6 @@ The procedure to download the Freesound 2019 Kaggle Competition dataset directly
 
 
 
-A huge thanks to the fastai, & fastai audio communities and those who produced Kaggle Competition write-ups in being so generous and  informative with the efforts, knowledge, and time
+A huge thanks to the fastai & fastai audio communities and those who produced Kaggle Competition write-ups in being so generous and  informative with their efforts, knowledge, and time.
 
 Should you have any queries regarding this repo, please contact me via a GitHub Message.
