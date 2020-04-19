@@ -38,9 +38,9 @@ The following libraries are required to run the notebook  `model_dev_and_test.ip
 * In addition a Librosa Soundfile dependency must be installed:
   * `!conda install -c conda-forge libsndfile --yes`
 
-### Dataset
+## Dataset
 
-The procedure to download the Freesound 2019 Kaggle Competition dataset directly to the notebook instance storage is outlined within [this](https://www.kaggle.com/general/74235) Kaggle forum post and followed in detail within the notebook.
+The procedure to download the Freesound 2019 Kaggle Competition dataset directly to the notebook instance storage is outlined within [this](https://www.kaggle.com/general/74235) Kaggle forum post and followed in detail within the notebooks stated above.
 
 
 
