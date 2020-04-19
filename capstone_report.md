@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree Capstone Project
 
 ## Multi-Label Auto-Tagging of Audio Files Using fastai2 Audio
-Mike Fuller, 18 April 2020
+Mike Fuller, 19 April 2020
 
 
 
@@ -145,6 +145,16 @@ The Noisy Train dataset average file length was significantly longer on average 
 
 In addition, as the name implies, the Noisy Train set files have a significantly higher noise floor than the Curated Train set due to the provenance of the files.
 
+## Data Visualisation
+
+The following figure clearly illustrates the differences between the difference in durations of audio files between the two datasets:
+
+![dataset-length-comp](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\dataset-length-comp.jpg)
+
+​											Fig 6. Train vs Noisy dataset durations (x-axis = seconds)
+
+
+
 Therefore, in the development of the model the following factors will need to be considered:
 
 * Noise floor differences between the curated and noisy train set will affect how the signals are clipped to shorter lengths to feed into the CNN.
@@ -160,9 +170,9 @@ This signal processing stage will involve trimming (to ensure uniform duration) 
 
 
 
-***INSERT IMAGE OF WAVEFORM AND ASSOCAITED SPECTROGRAM HERE**
+![wav-melspec-conversion](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\wav-melspec-conversion.jpg)
 
-
+​												Fig 7. Train vs Noisy dataset durations (x-axis = seconds)
 
 
 
@@ -299,7 +309,7 @@ The above augmentations (prior to batch transformations), produced the following
 
 ![aug-mel-spectrograms](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\aug-mel-spectrograms.jpg)
 
-​															Fig 6. Augmented Mel-spectrograms
+​															Fig 8. Augmented Mel-spectrograms
 
 [^19]: [Chan,Zhang,Chiu, Zoph,Cubuk,Le - 2019 - SpecAugment: A Simple Data Augmentation Method for Automatic Speech Recognition](https://arxiv.org/abs/1904.08779)
 
@@ -313,7 +323,7 @@ The implemented training method was chosen based on the Competitions 6th place w
 
 ![train-test-method](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\train-test-method.jpg)
 
-​																	Fig 7. Train-Test-Prediction Stages
+​																	Fig 9. Train-Test-Prediction Stages
 
 **Stage 1 - Noisy Training Set**
 
@@ -485,7 +495,7 @@ This highest score achieved by any initial model, was an lwl-rap of 0.61013 on t
 
 ![image-20200418112147418](C:\Users\mikef\AppData\Roaming\Typora\typora-user-images\image-20200418112147418.png)
 
-​																	Fig 8. Initial Best Score
+​																	Fig 10. Initial Best Score
 
 
 
@@ -497,7 +507,7 @@ Test-Time-Augmentation was shown to provide a benefit of ~3% improvement during 
 
 ![image-20200418113646639](C:\Users\mikef\AppData\Roaming\Typora\typora-user-images\image-20200418113646639.png)
 
-​														Fig 9. Improvement using TTA
+​														Fig 11. Improvement using TTA
 
 
 
@@ -511,7 +521,7 @@ Whatsmore, the pretrained xresnet50 model was replaced by the state-of-the-art x
 
 ![image-20200418113528769](C:\Users\mikef\AppData\Roaming\Typora\typora-user-images\image-20200418113528769.png)
 
-​													Fig 10. Improvement using SOTA model
+​													Fig 12. Improvement using SOTA model
 
 
 
@@ -528,7 +538,7 @@ The procedures outlined in the above sections were used to obtain a final predic
 
 ![image-20200418113906272](C:\Users\mikef\AppData\Roaming\Typora\typora-user-images\image-20200418113906272.png)
 
-​																	Fig 11. Final Prediction Score, lwl-rap
+​																	Fig 13. Final Prediction Score, lwl-rap
 
 
 
@@ -548,7 +558,7 @@ One very clear visual element of the datasets is the difference in the noise lev
 
 ![noisy-curated-comp](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\noisy-curated-comp.jpg)
 
-​											Fig 12. Differences in noise level between Curated and Noisy Set
+​											Fig 14. Differences in noise level between Curated and Noisy Set
 
 
 

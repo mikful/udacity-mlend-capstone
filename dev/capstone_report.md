@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree Capstone Project
 
 ## Multi-Label Auto-Tagging of Audio Files Using fastai2 Audio
-Mike Fuller, 18 April 2020
+Mike Fuller, 19 April 2020
 
 
 
@@ -22,6 +22,8 @@ The in-development user-contributed fast.ai2 Audio library[^2] inspired me to un
 
 [^1]: http://dcase.community/challenge2020/index
 [^2]: https://github.com/rbracco/fastai2_audio
+
+
 
 ### Problem Statement
 
@@ -127,8 +129,6 @@ In terms of the file durations, the average file length was 7.63 seconds and the
 
 ​									Fig 3. Pandas Profiling information for the audio file durations
 
-
-
 **Noisy Train Data**
 
 As with the Curated dataset, with the Noisy Train dataset it was found that the bit-rate was a constant 16bits, the channels a constant 1 (mono), constant sample rate of 44100kHz. However, in this dataset there were 1168 different tagging combinations of the 80 audio labels over the total file count (19815 files):
@@ -145,20 +145,34 @@ The Noisy Train dataset average file length was significantly longer on average 
 
 In addition, as the name implies, the Noisy Train set files have a significantly higher noise floor than the Curated Train set due to the provenance of the files.
 
+## Data Visualisation
+
+The following figure clearly illustrates the differences between the difference in durations of audio files between the two datasets:
+
+![dataset-length-comp](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\dataset-length-comp.jpg)
+
+​											Fig 6. Train vs Noisy dataset durations (x-axis = seconds)
+
+
+
 Therefore, in the development of the model the following factors will need to be considered:
 
 * Noise floor differences between the curated and noisy train set will affect how the signals are clipped to shorter lengths to feed into the CNN.
 * The average lengths also have a high range of values both over the the individual datasets and between the curated and noisy set, we will need to ensure the main recorded features corresponding the file labels of each recording are kept within any shortened file lengths.
 
-
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Algorithms and Techniques
 
 **Mel-Spectrograms**
 
-This signal processing stage will involve trimming (to ensure uniform duration) in order be converted to uniform length log-mel-spectrogram representations of the audio. A log-mel-spectrogram is a spectrogram representation of the audio (i.e. a frequency-domain representation based on the Fourier Transform, with x-axis = time, y axis = frequency and colour depth/pixel value = relative sound intensity), which has been has been converted to the Mel scale on the y-axis by a non-linear transform, in order to be more representative of the highly non-linear magnitude and frequency sensitivity of the human ear[^1]. The chosen settings will be discussed and shown further in the Data Preprocessing section.
+This signal processing stage will involve trimming (to ensure uniform duration) in order be converted to uniform length log-mel-spectrogram representations of the audio. A log-mel-spectrogram is a spectrogram representation of the audio (i.e. a frequency-domain representation based on the Fourier Transform, with x-axis = time, y axis = frequency and colour depth/pixel value = relative sound intensity), which has been has been converted to the Mel scale on the y-axis by a non-linear transform, in order to be more representative of the highly non-linear magnitude and frequency sensitivities of the human ear[^10]. The chosen settings will be discussed and shown further in the Data Preprocessing section.
+
+
+
+![wav-melspec-conversion](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\wav-melspec-conversion.jpg)
+
+​												Fig 7. Train vs Noisy dataset durations (x-axis = seconds)
 
 
 
@@ -168,19 +182,15 @@ The length uniformity of the audio clips in is important, as it allows 2D tensor
 
 * Architecture: XResNet50 based on the Bag of Tricks[^12] paper which includes tweaks to the model architecture for higher performance. ResNets use skip connections in order to allow propagation of values more quickly through the architecture, giving significant speed improvements for deeper networks. This has further been augmented in the Bag of Tricks paper, whereby the residual block convolutional layers have been re-arranged such that further efficiency gains are made.
 
-- Activation Function: Mish[^13] which provides improvements over the standard ReLU activation function.
-- Optimizer Function: Ranger which is a combination of the RAdam[^14] and Lookahead[^15] optimizer functions. 
+- Activation Function: Mish[^13] which has been shown to provide performance improvements over the standard ReLU activation function.
+- Optimizer Function: Ranger which is a combination of the RAdam[^14] and Lookahead[^15] optimizer functions. These functions work as a searching pair, whereby one learner goes ahead of the other to explore the function topography, such that traps involving local minima can be avoided.
 - Layer tweaks: Self-Attention Layers[^16]
 - Replacing Max Pooling Layers with "MaxBlurPool" layers for better generalization
 - Flat-Cosine decay learning rate scheduling
 
-
-
 **K-Folds Validation**
 
 Sci-Kit Learn's KFolds Validation function was used to split the datasets into 5 folds, to allow all of the available data to be used in the training and to further allow the 5 created models to give ensembled predictions on the Test set, which provides a significant performance improvement over a single model.
-
-
 
 **Test-Time Augmentation (TTA)**
 
@@ -201,8 +211,6 @@ In addition to the methods outlined above, Test-Time augmentations were applied 
 ### Benchmark
 
 The Baseline for the Kaggle Competition was set at 0.53792 which provided a minimum target. The winner[^18] of the competition acheived 0.75980, which provided the upper target for the system. The details of the model can be found on the linked GitHub page, but for brevity, the basic details of the system from the GitHub repo, were as follows:
-
-
 
 > - Log-scaled mel-spectrograms
 > - CNN model with attention, skip connections and auxiliary classifiers
@@ -249,8 +257,6 @@ df_curated = create_train_curated_df('../data/train_curated.csv', remove_files=r
 df_curated.head()
 ```
 
-
-
 The DataFrames were then used to supply the fastai DataBlock API with the filenames, which could then be processed using the fastai2 audio `item_transformations` which are applied to each file before training. After significant testing iterations the audio transformations settings were chosen as follows:
 
 ```python
@@ -284,8 +290,6 @@ item_tfms = [RemoveSilence(threshold=20),
              MaskTime(num_masks=1, size=8), MaskFreq(num_masks=1, size=8)]
 ```
 
-
-
 **Batch Transforms**
 
 In addition to the item transforms above, Batch Transforms were used as part of the DataBlock API  which are transformations applied per batch during training:
@@ -305,7 +309,7 @@ The above augmentations (prior to batch transformations), produced the following
 
 ![aug-mel-spectrograms](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\aug-mel-spectrograms.jpg)
 
-​															Fig 6. Augmented Mel-spectrograms
+​															Fig 8. Augmented Mel-spectrograms
 
 [^19]: [Chan,Zhang,Chiu, Zoph,Cubuk,Le - 2019 - SpecAugment: A Simple Data Augmentation Method for Automatic Speech Recognition](https://arxiv.org/abs/1904.08779)
 
@@ -317,13 +321,9 @@ The data augmentations stated above were used to significantly improve the perfo
 
 The implemented training method was chosen based on the Competitions 6th place winner's technique[^20], however, only the first two stages were implemented as follows due to the cost requirements using GCP:
 
-
-
 ![train-test-method](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\train-test-method.jpg)
 
-​																	Fig 7. Train-Test-Prediction Stages
-
-
+​																	Fig 9. Train-Test-Prediction Stages
 
 **Stage 1 - Noisy Training Set**
 
@@ -390,15 +390,11 @@ for fold, (train_idx, valid_idx) in enumerate(kf.split(df)):
     learn.save(f'stage-1_noisy_fold-{fold+1}_sota2')
 ```
 
-
-
 **Stage 2 - Curated Train Set**
 
 After all 5 models had been trained on the Noisy set, the models were then trained on different 5-folds of the Curated Set. This essentially gave 5 distinct models, all trained on different data for later ensembling. 
 
 *Note: MixUp data augmentations were applied to the Curated Train set, shown as training callback below. This is whereby two spectrogram tenors are combined into a single 2D tensor with a certain percentage blend (50% in this case), allowing the model to learn double the amount of feature labels per batch. This also provides a form of regularization for the model which improves generalization on the validation/test sets.*
-
-
 
 ```python
 ## K-Folds training loop
@@ -439,8 +435,6 @@ for fold, (train_idx, valid_idx) in enumerate(kf.split(df)):
     print('Saving model...')
     learn.save(f'stage-2_curated_fold-{fold+1}_sota2')
 ```
-
-
 
 **Testing**
 
@@ -487,14 +481,13 @@ The produced .csv file was then submitted to Kaggle.
 
 [^20]: https://github.com/ebouteillon/freesound-audio-tagging-2019
 
+
+
 ### Refinement
 
 **Initial Model**
 
-The  initial CNN architecture used was a pre-trained (on ImageNet) xresnet50 model for speed of iteration. This was trained on a single fold smaller subset of the Noisy data (ranging from 20-80% using the DataBlock API - `RandomSubsetSplitter`function) used for faster iteration on the noisy subset, while all of the Curated data was used. The data augmentation settings used, were slightly different however, as non-square mel-spectrograms were used to see if larger spectrograms could give improved scores as follows:
-
-* ???
-* 
+The  initial CNN architecture used was a pre-trained (on ImageNet) xresnet50 model for speed of iteration. This was trained on a single fold smaller subset of the Noisy data (ranging from 20-80% using the DataBlock API - `RandomSubsetSplitter`function) used for faster iteration on the noisy subset, while all of the Curated data was used. The data augmentation settings used, were slightly different however, as non-square mel-spectrograms were used to see if larger spectrograms could give improved scores, which was the case, however, this was at the expense of training time.
 
 This highest score achieved by any initial model, was an lwl-rap of 0.61013 on the test-set:
 
@@ -502,7 +495,9 @@ This highest score achieved by any initial model, was an lwl-rap of 0.61013 on t
 
 ![image-20200418112147418](C:\Users\mikef\AppData\Roaming\Typora\typora-user-images\image-20200418112147418.png)
 
-​																	Fig 8. Initial Best Score
+​																	Fig 10. Initial Best Score
+
+
 
 This score, while not bad for a small amount of testing and still beating the competition baseline, was far from achieving near state-of-the-art performance. 
 
@@ -512,7 +507,7 @@ Test-Time-Augmentation was shown to provide a benefit of ~3% improvement during 
 
 ![image-20200418113646639](C:\Users\mikef\AppData\Roaming\Typora\typora-user-images\image-20200418113646639.png)
 
-​														Fig 9. Improvement using TTA
+​														Fig 11. Improvement using TTA
 
 
 
@@ -526,13 +521,11 @@ Whatsmore, the pretrained xresnet50 model was replaced by the state-of-the-art x
 
 ![image-20200418113528769](C:\Users\mikef\AppData\Roaming\Typora\typora-user-images\image-20200418113528769.png)
 
-​													Fig 10. Improvement using SOTA model
+​													Fig 12. Improvement using SOTA model
 
 
 
 Finally, a full 5-Fold Cross-Validation training was chosen for both the Noisy and Curated set as detailed in the image in Section III: Implementation above, with some tweaks to the spectrograms settings, i.e. using `top_dB` of 60 to ensure only the most prominent Noisy Set features were captured by the mel-spectrograms. This this approach achieved the final score of 0.69788, a marked improvement that would have gained bronze-medal position in the competition and could certainly be improved upon further.
-
-
 
 [^21]: https://medium.com/@mnpinto/multi-label-audio-classification-7th-place-public-lb-solution-for-freesound-audio-tagging-2019-a7ccc0e0a02f
 
@@ -543,11 +536,9 @@ Finally, a full 5-Fold Cross-Validation training was chosen for both the Noisy a
 ### Model Evaluation and Validation
 The procedures outlined in the above sections were used to obtain a final prediction score of 0.69788.
 
-
-
 ![image-20200418113906272](C:\Users\mikef\AppData\Roaming\Typora\typora-user-images\image-20200418113906272.png)
 
-​																	Fig 11. Final Prediction Score, lwl-rap
+​																	Fig 13. Final Prediction Score, lwl-rap
 
 
 
@@ -567,7 +558,7 @@ One very clear visual element of the datasets is the difference in the noise lev
 
 ![noisy-curated-comp](C:\Users\mikef\Documents\GitHub\udacity-mlend-capstone\images\noisy-curated-comp.jpg)
 
-​											Fig 12. Differences in noise level between Curated and Noisy Set
+​											Fig 14. Differences in noise level between Curated and Noisy Set
 
 
 
