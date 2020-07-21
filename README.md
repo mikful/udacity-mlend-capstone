@@ -47,3 +47,10 @@ The procedure to download the Freesound 2019 Kaggle Competition dataset directly
 A huge thanks to the fastai & fastai audio communities and those who produced Kaggle Competition write-ups in being so generous and  informative with their efforts, knowledge, and time.
 
 Should you have any queries regarding this repo, please contact me via a GitHub Message.
+
+## Blog
+
+For a further description, based on the capstone report, please see my 3 part blog series about this project. 
+
+1. [Part 1 - Problem Definition, Data Analysis, Methods and Algorithms](https://mikful.github.io/blog/deep%20learning/fastai2/audio/markdown/2020/06/05/Udacity-Capstone-Part-1-Definition-and-Data.html)
+2. [Part 2 - Methodology and Implementation](https://mikful.github.io/blog/deep%20learning/fastai2/audio/markdown/2020/06/12/Udacity-Capstone-Part-2-Implementation.html)
